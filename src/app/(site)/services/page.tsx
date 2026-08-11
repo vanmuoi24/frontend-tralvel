@@ -1,7 +1,7 @@
 import { ServiceDirectory } from "@/components/services/service-directory";
 import { getBackendServices } from "@/data/backend-services";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export default async function ServicesPage() {
   const services = await getBackendServices("zh");

@@ -1,12 +1,17 @@
 import { notFound } from "next/navigation";
 import { AirportTransferDetailView } from "@/components/services/airport-transfer/airport-transfer-detail-view";
 import { airportTransferVehicles } from "@/data/airport-transfer";
+import { staticAirportTransferParams } from "@/data/static-route-params";
 
 type AirportTransferDetailPageProps = {
   params: Promise<{ vehicle: string }>;
 };
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return staticAirportTransferParams;
+}
 
 function getVehicle(slug: string) {
   return airportTransferVehicles.find((vehicle) => vehicle.slug === slug);

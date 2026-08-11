@@ -6,7 +6,7 @@ import { getBackendSiteData } from "@/data/backend-site";
 import { ServicesProvider } from "@/providers/services-provider";
 import { SiteProvider } from "@/providers/site-provider";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const [zhServices, enServices, zhSiteData, enSiteData] = await Promise.all([

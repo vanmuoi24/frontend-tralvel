@@ -2,12 +2,17 @@ import { notFound } from "next/navigation";
 import { ServiceOptionsFilter } from "@/components/services/service-options-filter";
 import { getBackendServiceBySlug } from "@/data/backend-services";
 import { getServiceDetailCatalog } from "@/data/service-detail-catalog";
+import { staticServiceParams } from "@/data/static-route-params";
 
 type ServicePageProps = {
   params: Promise<{ service: string }>;
 };
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return staticServiceParams;
+}
 
 export async function generateMetadata({ params }: ServicePageProps) {
   const { service: serviceId } = await params;

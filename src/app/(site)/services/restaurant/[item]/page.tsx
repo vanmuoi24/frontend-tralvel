@@ -1,12 +1,17 @@
 import { GenericServiceItemDetailView } from "@/components/services/generic-service-item-detail-view";
 import { getServiceItemDetail } from "@/data/service-item-detail";
+import { staticGenericItemParams } from "@/data/static-route-params";
 import { titleFromSlug } from "@/lib/slugify";
 
 type PageProps = {
   params: Promise<{ item: string }>;
 };
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return staticGenericItemParams.restaurant;
+}
 
 export async function generateMetadata({ params }: PageProps) {
   const { item } = await params;
