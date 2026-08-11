@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { HotelDetailView } from "@/components/services/hotel/hotel-detail-view";
-import { getBackendServiceBySlug } from "@/data/backend-services";
+import { getLocalizedServiceById } from "@/data/localized-content";
 import type { IServiceCatalogItem } from "@/types/TypeService";
 
 type HotelDetailPageProps = {
@@ -31,11 +31,9 @@ const fallbackHotel: IServiceCatalogItem = {
 
 export const dynamicParams = false;
 
-export async function generateStaticParams() {
-  const [zhService, enService] = await Promise.all([
-    getBackendServiceBySlug("hotel", "zh"),
-    getBackendServiceBySlug("hotel", "en"),
-  ]);
+export function generateStaticParams() {
+  const zhService = getLocalizedServiceById("hotel", "zh");
+  const enService = getLocalizedServiceById("hotel", "en");
   const slugs = new Set([
     ...(zhService?.catalogItems ?? []).map((item) => item.slug),
     ...(enService?.catalogItems ?? []).map((item) => item.slug),
@@ -45,11 +43,9 @@ export async function generateStaticParams() {
   return (hotelSlugs.length ? hotelSlugs : [fallbackHotel.slug]).map((hotel) => ({ hotel }));
 }
 
-async function getHotelItems(slug: string) {
-  const [zhService, enService] = await Promise.all([
-    getBackendServiceBySlug("hotel", "zh"),
-    getBackendServiceBySlug("hotel", "en"),
-  ]);
+function getHotelItems(slug: string) {
+  const zhService = getLocalizedServiceById("hotel", "zh");
+  const enService = getLocalizedServiceById("hotel", "en");
   const zhItem = zhService?.catalogItems?.find((item) => item.slug === slug);
   const enItem = enService?.catalogItems?.find((item) => item.slug === slug);
   const item = zhItem ?? enItem;
@@ -59,7 +55,7 @@ async function getHotelItems(slug: string) {
 
 export async function generateMetadata({ params }: HotelDetailPageProps) {
   const { hotel } = await params;
-  const items = await getHotelItems(decodeURIComponent(hotel));
+  const items = getHotelItems(decodeURIComponent(hotel));
 
   return {
     title: `${items?.zh.translation?.title ?? "Hotel"} | An Khai Travel`,
@@ -69,7 +65,7 @@ export async function generateMetadata({ params }: HotelDetailPageProps) {
 
 export default async function HotelDetailPage({ params }: HotelDetailPageProps) {
   const { hotel } = await params;
-  const items = await getHotelItems(decodeURIComponent(hotel));
+  const items = getHotelItems(decodeURIComponent(hotel));
 
   if (!items) {
     notFound();

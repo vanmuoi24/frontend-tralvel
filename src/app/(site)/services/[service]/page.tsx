@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ServiceOptionsFilter } from "@/components/services/service-options-filter";
-import { getBackendServiceBySlug } from "@/data/backend-services";
+import { getLocalizedServiceById } from "@/data/localized-content";
 import { getServiceDetailCatalog } from "@/data/service-detail-catalog";
 import { staticServiceParams } from "@/data/static-route-params";
 
@@ -16,7 +16,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: ServicePageProps) {
   const { service: serviceId } = await params;
-  const service = await getBackendServiceBySlug(serviceId, "zh");
+  const service = getLocalizedServiceById(serviceId, "zh");
 
   return {
     title: `${service?.label ?? "Service"} | An Khai Travel`,
@@ -26,10 +26,8 @@ export async function generateMetadata({ params }: ServicePageProps) {
 
 export default async function ServiceDetailPage({ params }: ServicePageProps) {
   const { service: serviceId } = await params;
-  const [zhService, enService] = await Promise.all([
-    getBackendServiceBySlug(serviceId, "zh"),
-    getBackendServiceBySlug(serviceId, "en"),
-  ]);
+  const zhService = getLocalizedServiceById(serviceId, "zh");
+  const enService = getLocalizedServiceById(serviceId, "en");
   const catalog = getServiceDetailCatalog(serviceId);
 
   if (!zhService || !enService || !catalog) {

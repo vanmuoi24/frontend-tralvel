@@ -1,10 +1,10 @@
 import { ServiceDirectory } from "@/components/services/service-directory";
-import { getBackendServices } from "@/data/backend-services";
+import { getLocalizedServices } from "@/data/localized-content";
 
 export const dynamic = "force-static";
 
-export default async function ServicesPage() {
-  const services = await getBackendServices("zh");
+export default function ServicesPage() {
+  const services = getLocalizedServices("zh");
 
   return (
     <div className="bg-[#f3f4f6] py-6 md:py-8">

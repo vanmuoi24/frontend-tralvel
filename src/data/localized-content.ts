@@ -1,6 +1,7 @@
-import { statistics } from "@/data/site";
+import { navLinks, siteConfig, statistics, type SiteConfig } from "@/data/site";
 import { travelServices } from "@/data/services";
 import type { Language } from "@/providers/language-provider";
+import type { IServiceCatalogItem } from "@/types/TypeService";
 
 export const heroCopy = {
   zh: {
@@ -284,13 +285,215 @@ const serviceTextByLanguage = {
 
 type LocalizedServiceId = keyof (typeof serviceTextByLanguage)["zh"];
 
+const localizedNavLinks = {
+  zh: navLinks,
+  en: [
+    { label: "Home", href: "/" },
+    { label: "Services", href: "/services" },
+    { label: "Contact", href: "/contact" },
+  ],
+} satisfies Record<Language, typeof navLinks>;
+
+const localizedSiteConfig: Record<Language, SiteConfig> = {
+  zh: siteConfig,
+  en: {
+    ...siteConfig,
+    tagline: "Vietnam Travel Service Expert",
+    description:
+      "An Khai Travel provides Vietnam travel services: hotels, visas, car rental, airport transfers, spa, SIM cards, flight tickets, guides, and restaurant recommendations.",
+  },
+};
+
+const hotelCatalogItemsByLanguage = {
+  zh: [
+    {
+      id: "fake-hotel-1",
+      title: "胡志明市河畔酒店",
+      badge: "熱門推薦",
+      location: "第 1 郡，胡志明市",
+      distance: "距市中心 1.2km",
+      room: "高級雙人房 / 家庭房",
+      amenities: "早餐, 泳池, 健身房, 中文協助",
+      perks: "可安排接機, 適合家庭",
+      score: "9.1",
+      reviews: "1,286 則評價",
+      image: "/hotel1.jpeg",
+      gallery: ["/hotel1.jpeg", "/hotel2.jpeg", "/hotel3.jpeg", "/hotel4.jpeg"],
+      stars: "5 stars",
+    },
+    {
+      id: "fake-hotel-2",
+      title: "峴港海景度假酒店",
+      badge: "海邊住宿",
+      location: "美溪海灘，峴港",
+      distance: "距海灘 300m",
+      room: "海景房 / 連通房",
+      amenities: "海景, 早餐, 親子友好, SPA",
+      perks: "靠近海灘, 適合度假",
+      score: "8.9",
+      reviews: "954 則評價",
+      image: "/hotel2.jpeg",
+      gallery: ["/hotel2.jpeg", "/hotel3.jpeg", "/hotel5.jpeg", "/hotel6.jpeg"],
+      stars: "4 stars",
+    },
+    {
+      id: "fake-hotel-3",
+      title: "河內老城精品酒店",
+      badge: "市中心",
+      location: "還劍湖，河內",
+      distance: "距市中心 0.8km",
+      room: "精品客房 / 雙床房",
+      amenities: "早餐, 步行方便, 機場接送",
+      perks: "適合首次到訪, 餐廳多",
+      score: "8.7",
+      reviews: "732 則評價",
+      image: "/hotel3.jpeg",
+      gallery: ["/hotel3.jpeg", "/hotel1.jpeg", "/hotel4.jpeg", "/hotel6.jpeg"],
+      stars: "4 stars",
+    },
+    {
+      id: "fake-hotel-4",
+      title: "新山一機場商務酒店",
+      badge: "近機場",
+      location: "新平郡，胡志明市",
+      distance: "距機場 1.5km",
+      room: "商務房 / 短住休息",
+      amenities: "24 小時前台, 接送方便, 快速入住",
+      perks: "適合轉機, 近機場",
+      score: "8.5",
+      reviews: "618 則評價",
+      image: "/hotel4.jpeg",
+      gallery: ["/hotel4.jpeg", "/hotel5.jpeg", "/hotel1.jpeg", "/hotel2.jpeg"],
+      stars: "3 stars",
+    },
+  ],
+  en: [
+    {
+      id: "fake-hotel-1",
+      title: "Ho Chi Minh Riverside Hotel",
+      badge: "Popular pick",
+      location: "District 1, Ho Chi Minh City",
+      distance: "1.2km from city center",
+      room: "Superior double / family room",
+      amenities: "Breakfast, pool, gym, Chinese support",
+      perks: "Airport transfer available, family friendly",
+      score: "9.1",
+      reviews: "1,286 reviews",
+      image: "/hotel1.jpeg",
+      gallery: ["/hotel1.jpeg", "/hotel2.jpeg", "/hotel3.jpeg", "/hotel4.jpeg"],
+      stars: "5 stars",
+    },
+    {
+      id: "fake-hotel-2",
+      title: "Da Nang Sea View Resort",
+      badge: "Beach stay",
+      location: "My Khe Beach, Da Nang",
+      distance: "300m from beach",
+      room: "Sea-view room / connecting room",
+      amenities: "Sea view, breakfast, family friendly, spa",
+      perks: "Near beach, good for holidays",
+      score: "8.9",
+      reviews: "954 reviews",
+      image: "/hotel2.jpeg",
+      gallery: ["/hotel2.jpeg", "/hotel3.jpeg", "/hotel5.jpeg", "/hotel6.jpeg"],
+      stars: "4 stars",
+    },
+    {
+      id: "fake-hotel-3",
+      title: "Hanoi Old Quarter Boutique Hotel",
+      badge: "Downtown",
+      location: "Hoan Kiem Lake, Hanoi",
+      distance: "0.8km from city center",
+      room: "Boutique room / twin room",
+      amenities: "Breakfast, walkable area, airport transfer",
+      perks: "First-visit friendly, many restaurants nearby",
+      score: "8.7",
+      reviews: "732 reviews",
+      image: "/hotel3.jpeg",
+      gallery: ["/hotel3.jpeg", "/hotel1.jpeg", "/hotel4.jpeg", "/hotel6.jpeg"],
+      stars: "4 stars",
+    },
+    {
+      id: "fake-hotel-4",
+      title: "Tan Son Nhat Airport Business Hotel",
+      badge: "Near airport",
+      location: "Tan Binh District, Ho Chi Minh City",
+      distance: "1.5km from airport",
+      room: "Business room / short stay",
+      amenities: "24-hour front desk, easy transfer, fast check-in",
+      perks: "Good for transit, near airport",
+      score: "8.5",
+      reviews: "618 reviews",
+      image: "/hotel4.jpeg",
+      gallery: ["/hotel4.jpeg", "/hotel5.jpeg", "/hotel1.jpeg", "/hotel2.jpeg"],
+      stars: "3 stars",
+    },
+  ],
+};
+
+function buildHotelCatalogItems(language: Language): IServiceCatalogItem[] {
+  return hotelCatalogItemsByLanguage[language].map((hotel, index) => ({
+    id: hotel.id,
+    serviceId: "hotel",
+    slug: hotel.id.replace("fake-", ""),
+    imageUrl: hotel.image,
+    gallery: hotel.gallery,
+    price: "",
+    unit: "",
+    sortOrder: index + 1,
+    active: true,
+    tags: {
+      area: hotel.location,
+      tier: hotel.stars,
+      guest: index === 3 ? "Transit" : "Family",
+    },
+    attributes: {
+      area: hotel.location,
+      room: hotel.room,
+      tier: hotel.stars,
+    },
+    translation: {
+      title: hotel.title,
+      badge: hotel.badge,
+      location: hotel.location,
+      type: hotel.room,
+      description: `${hotel.location} | ${hotel.distance}`,
+      fields: [
+        { label: "Distance", value: hotel.distance },
+        { label: "Amenities", value: hotel.amenities },
+        { label: "Perks", value: hotel.perks },
+        { label: "Stars", value: hotel.stars },
+      ],
+      includes: hotel.amenities.split(",").map((item) => item.trim()),
+      content: {
+        score: hotel.score,
+        scoreLabel: hotel.reviews,
+        reviews: hotel.reviews,
+      },
+    },
+  }));
+}
+
 export function getLocalizedServices(language: Language) {
   const translations = serviceTextByLanguage[language];
 
   return travelServices.map((service) => ({
     ...service,
     ...translations[service.id as LocalizedServiceId],
+    catalogItems: service.id === "hotel" ? buildHotelCatalogItems(language) : service.catalogItems,
   }));
+}
+
+export function getLocalizedServiceById(id: string, language: Language) {
+  return getLocalizedServices(language).find((service) => service.id === id) ?? null;
+}
+
+export function getLocalizedSiteData(language: Language) {
+  return {
+    site: localizedSiteConfig[language],
+    statistics: getLocalizedStatistics(language),
+    navLinks: localizedNavLinks[language],
+  };
 }
 
 export function getLocalizedStatistics(language: Language) {

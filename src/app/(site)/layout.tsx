@@ -1,20 +1,17 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { FloatingContactWidget } from "@/components/layout/floating-contact-widget";
-import { getBackendServices } from "@/data/backend-services";
-import { getBackendSiteData } from "@/data/backend-site";
+import { getLocalizedServices, getLocalizedSiteData } from "@/data/localized-content";
 import { ServicesProvider } from "@/providers/services-provider";
 import { SiteProvider } from "@/providers/site-provider";
 
 export const dynamic = "force-static";
 
-export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const [zhServices, enServices, zhSiteData, enSiteData] = await Promise.all([
-    getBackendServices("zh"),
-    getBackendServices("en"),
-    getBackendSiteData("zh"),
-    getBackendSiteData("en"),
-  ]);
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
+  const zhServices = getLocalizedServices("zh");
+  const enServices = getLocalizedServices("en");
+  const zhSiteData = getLocalizedSiteData("zh");
+  const enSiteData = getLocalizedSiteData("en");
 
   return (
     <ServicesProvider services={{ zh: zhServices, en: enServices }}>
