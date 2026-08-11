@@ -5,10 +5,12 @@ import type { NextConfig } from "next";
 const root = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  output: "export",
   turbopack: {
     root,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
